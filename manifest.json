@@ -1,0 +1,56 @@
+{
+   "author": "fb.com/hi.trfi",
+   "background": {
+      "scripts": [ "common.js", "background.js" ]
+   },
+   "browser_action": {
+      "default_icon": "assets/icon.png",
+      "default_popup": "popup/popup.html",
+      "default_title": "Easy Quiz Poly"
+   },
+   "content_scripts": [ {
+      "exclude_matches": [ "*://*.poly.edu.vn/*cmd=outQuestionSummary*", "*://*.poly.edu.vn/*cmd=outUserResultsOverview*", "*://*.poly.edu.vn/*cmd=showPasswordForm*", "*://*.poly.edu.vn/*cmd=finishTest*", "*://*.poly.edu.vn/*&cmd=post*", "*://*.poly.edu.vn/*pmode=edit*", "*://*.poly.edu.vn/*cmd=outUserPassDetails*", "*://*.poly.edu.vn/*cmdClass=iltestplayerfixedquestionsetgui*" ],
+      "js": [ "injects/lms_script.js" ],
+      "matches": [ "*://*.poly.edu.vn/*&sequence=*" ],
+      "run_at": "document_end"
+   }, {
+      "js": [ "injects/lms_start.js" ],
+      "matches": [ "*://*.poly.edu.vn/*target=tst_*", "*://*.poly.edu.vn/*cmdClass=ilobjtestgui*", "*://*.poly.edu.vn/*cmd=infoScreen*", "*://*.poly.edu.vn/*iltestevaluationgui*" ]
+   }, {
+      "js": [ "injects/unlimited_fshare.js" ],
+      "matches": [ "*://*.poly.edu.vn/*ilexsubmissionfilegui*" ]
+   }, {
+      "exclude_matches": [ "*://*.poly.edu.vn/*cmd=infoScreen*" ],
+      "js": [ "injects/lms_online.js" ],
+      "matches": [ "*://*.poly.edu.vn/*baseClass=ilSAHSPresentationGUI*" ],
+      "run_at": "document_end"
+   }, {
+      "js": [ "injects/cms_quiz.js" ],
+      "matches": [ "https://cms.poly.edu.vn/courses/course*/courseware/*" ],
+      "run_at": "document_end"
+   }, {
+      "js": [ "injects/cms_get_answer_inject.js" ],
+      "matches": [ "https://cms.poly.edu.vn/courses/course*/courseware/*" ],
+      "run_at": "document_start"
+   }, {
+      "js": [ "injects/classroom_inject.js" ],
+      "matches": [ "https://classroom.google.com/*/details" ],
+      "run_at": "document_start"
+   } ],
+   "description": "Tiện ích hỗ trợ sinh viên làm bài Quiz trường Cao đẳng FPT Polytechnic",
+   "externally_connectable": {
+      "matches": [ "*://localhost/*", "https://*.quizpoly.xyz/*" ]
+   },
+   "icons": {
+      "128": "assets/icon.png",
+      "16": "assets/icon.png",
+      "48": "assets/icon.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo2Fh//Q4/KUkX0jv8bdwksZO2Dwag8xaLHK2DqOr4sjUqKFJbigTVpfdWrom546JNU0A3lMRYfFf8vvWRWBQMutUpiQaRUfNjIDWES1cwErdkeZ7s9LuMBxF4+oGlVtgPt8ON8NzD0ewS43s+FbDAP9UE6sZizYcq7saWEJyXUQIVCDyAcD3LlA+j4lzJUu6um0uJlRwuhzLfmHIK3+e9XZMJy+e51Y2dGbD1nn8wHGlidS8Z3phUyFdrczKTLVNRUW8YgKA2ORN28Hw8py1fYT05Ig6vFtg9Xsllt9p5khms23hZgJE7NJnzKSj1nKZAlXqGDlHV+B8p2mJ94WGdwIDAQAB",
+   "manifest_version": 2,
+   "name": "Easy Quiz Poly",
+   "permissions": [ "webRequest", "webRequestBlocking", "cookies", "*://*.poly.edu.vn/*", "http://localhost/*", "https://*.quizpoly.xyz/*", "storage", "tabs", "alarms", "notifications" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "3.0.3",
+   "web_accessible_resources": [ "injects/classroom_upload.js", "injects/cms_get_answer.js", "injects/upload_script.js" ]
+}
