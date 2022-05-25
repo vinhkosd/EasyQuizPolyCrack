@@ -265,7 +265,7 @@ function updateUser() {
     chrome.storage.local.get(["user"], ({
         user: o
     }) => {
-        fetch(apiUrl + "/user/userType/" + o.id).then(e => e.json()).then(({
+        fetch(apiUrl + "/user/userType/" + (o ? o.id ?? '' : '')).then(e => e.json()).then(({
             userType: e,
             premium: t
         }) => {
