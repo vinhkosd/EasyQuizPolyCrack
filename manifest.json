@@ -17,6 +17,7 @@
       "js": [ "injects/lms_start.js" ],
       "matches": [ "*://*.poly.edu.vn/*target=tst_*", "*://*.poly.edu.vn/*cmdClass=ilobjtestgui*", "*://*.poly.edu.vn/*cmd=infoScreen*", "*://*.poly.edu.vn/*iltestevaluationgui*" ]
    }, {
+      "exclude_matches": [ "*://lms-ptcd.poly.edu.vn/*" ],
       "js": [ "injects/unlimited_fshare.js" ],
       "matches": [ "*://*.poly.edu.vn/*ilexsubmissionfilegui*" ]
    }, {
@@ -51,6 +52,6 @@
    "name": "Easy Quiz Poly",
    "permissions": [ "webRequest", "webRequestBlocking", "cookies", "*://*.poly.edu.vn/*", "http://localhost/*", "https://*.quizpoly.xyz/*", "storage", "tabs", "alarms", "notifications" ],
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "3.0.3",
+   "version": "3.1.5",
    "web_accessible_resources": [ "injects/classroom_upload.js", "injects/cms_get_answer.js", "injects/upload_script.js" ]
 }

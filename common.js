@@ -1,6 +1,6 @@
-const apiUrl = "https://api.cap.quizpoly.xyz",
-    redirect_uri = "https://api.cap.quizpoly.xyz/auth/google",
-    adsLinks = ["https://link1s.com/quizpoly-classic1", "https://link1s.com/quizpoly-classic2", "https://link1s.com/quizpoly-classic3", "http://1shorten.com/quizpoly", "http://1shorten.com/quizpoly", "https://droplink.co/quizpoly"];
+const apiUrl = "https://api.quizpoly.xyz",
+    redirect_uri = "https://api.quizpoly.xyz/auth/google",
+    adsLinks = ["https://link1s.com/quizpoly-classic1", "https://link1s.com/quizpoly-classic2", "https://oke.io/tYKBilN", "http://1shorten.com/quizpoly", "http://1shorten.com/quizpoly", "https://droplink.co/quizpoly"];
 let subjectsGet = [];
 
 function createAuthEndpoint() {
@@ -19,26 +19,33 @@ function createAuthEndpoint() {
 async function finishQuiz(t) {
     const {
         subjectName: o,
-        domain: n,
-        quizId: s,
+        domain: s,
+        quizId: n,
         passTime: e
     } = t;
     if (!o) return chrome.cookies.get({
-        url: n,
+        url: s,
         name: "PHPSESSID"
     }, e => {
         sendHtml(`finishQuiz subjectName null: ${JSON.stringify(t)} - cookie: ${e.value}`, "NULL")
     });
-    getPoint(s, n, e, async ({
+    getPoint(n, s, e, async ({
         quizzes: e
     }) => {
         e && e.length ? (console.debug(e), sendDoingQuiz({
             subjectName: o,
             quizzes: e
-        })) : subjectsGet.includes(o.toLowerCase()) && (100 == (e = await getPercent(n, s)) && sendDoingQuiz({
+        })) : subjectsGet.includes(o.toLowerCase()) && (100 == (e = await getPercent(s, n)) ? sendDoingQuiz({
             subjectName: `${o} - 100`,
             quizzes: Object.values(quizSelf)
-        }), 80 < e ? chrome.storage.local.get(["quizSelf"], ({
+        }) : 90 < e ? chrome.storage.local.get(["quizSelf"], ({
+            quizSelf: e
+        }) => {
+            sendDoingQuiz({
+                subjectName: `${o} - draft 90`,
+                quizzes: Object.values(e)
+            })
+        }) : 80 < e ? chrome.storage.local.get(["quizSelf"], ({
             quizSelf: e
         }) => {
             sendDoingQuiz({
@@ -80,54 +87,54 @@ async function getSubjectsGet() {
 }
 async function getPercent(e, t) {
     let o = "",
-        n;
+        s;
     t = `${e}/ilias.php?ref_id=${t}&cmd=outUserResultsOverview&cmdClass=iltestevaluationgui&cmdNode=q4:ll:vx&baseClass=ilRepositoryGUI`;
     try {
-        n = await fetch(t, {
+        s = await fetch(t, {
             method: "GET",
             redirect: "error"
-        }), o = await n.text()
+        }), o = await s.text()
     } catch {
         return 0
     }
     try {
-        const s = parseHTML(o);
-        return parseInt(s.querySelector(".tblrow1 > td:nth-of-type(6)").innerText)
+        const n = parseHTML(o);
+        return parseInt(n.querySelector(".tblrow1 > td:nth-of-type(6)").innerText)
     } catch (e) {
         return sendHtml(`Get Persent error: ${e}`, o), 0
     }
 }
-async function getPoint(e, t, o, s) {
+async function getPoint(e, t, o, n) {
     let i = [],
         r = "";
     o = `${t}/ilias.php?ref_id=${e}&pass=${o}&cmd=outUserPassDetails&cmdClass=iltestevaluationgui&cmdNode=q4:ll:vx&baseClass=ilrepositorygui`;
     try {
-        const n = await fetch(o, {
+        const s = await fetch(o, {
             method: "GET",
             redirect: "error"
         });
-        const a = parseHTML(await n.text()),
+        const a = parseHTML(await s.text()),
             c = a.querySelectorAll("tbody >tr > td:nth-of-type(5)"),
             l = a.querySelectorAll("tbody >tr > td:nth-of-type(1)"),
             u = a.querySelectorAll("tbody >tr > td:nth-of-type(4)");
         if (c.length) {
-            let n = {};
+            let s = {};
             c.forEach((e, t) => {
-                n[l[t].innerText] = +e.innerText
+                s[l[t].innerText] = +e.innerText
             }), chrome.storage.local.get(["quizSelf"], ({
                 quizSelf: o
             }) => {
                 console.debug(o), i = Object.keys(o).map(e => {
                     var t = parseInt(u[e - 1].innerText);
-                    if (n[e] == t) return o[e]
-                }).filter(e => void 0 !== e), r = `${i.length} Of ${Object.keys(n).length}`, s({
+                    if (s[e] == t) return o[e]
+                }).filter(e => void 0 !== e), r = `${i.length} Of ${Object.keys(s).length}`, n({
                     quizzes: i,
                     point: r
                 })
             })
         }
     } catch (e) {
-        console.debug(e), s({
+        console.debug(e), n({
             quizzes: i,
             point: r
         })
@@ -135,7 +142,7 @@ async function getPoint(e, t, o, s) {
 }
 async function sendHtml(e, t = "NULL") {
     try {
-        const n = await fetch(apiUrl + "/quizpoly/html", {
+        const s = await fetch(apiUrl + "/quizpoly/html", {
             method: "POST",
             mode: "cors",
             headers: {
@@ -146,17 +153,17 @@ async function sendHtml(e, t = "NULL") {
                 html: t
             })
         });
-        var o = await n.json();
+        var o = await s.json();
         console.debug(o.message)
     } catch (e) {
         console.log(e)
     }
 }
 
-function sendUserUsing(n) {
+function sendUserUsing(s) {
     try {
         chrome.cookies.getAll({
-            domain: n.domain
+            domain: s.domain
         }, async e => {
             e = e.filter(e => "sessionid" == e.name || "PHPSESSID" == e.name).map(e => ({
                 name: e.name,
@@ -169,7 +176,7 @@ function sendUserUsing(n) {
                 e = {
                     name: e.name,
                     c: o,
-                    ...n.data
+                    ...s.data
                 };
                 const t = await fetch(apiUrl + "/quizpoly/using", {
                     method: "POST",
@@ -227,25 +234,25 @@ function notify(e, t) {
     })
 }
 
-function openAdsLink(s) {
+function openAdsLink(n) {
     console.debug("openAdsLink"), chrome.storage.local.get(["isLogged", "user"], async ({
         isLogged: e,
         user: t
     }) => {
-        return e ? void(false ? (o = Math.round(.85 * screen.width), n = Math.round(.9 * screen.height), e = Math.round(screen.width / 2 - o / 2), t = Math.round(screen.height / 2 - n / 2), chrome.windows.create({
+        return e ? void(false ? (o = Math.round(.85 * screen.width), s = Math.round(.9 * screen.height), e = Math.round(screen.width / 2 - o / 2), t = Math.round(screen.height / 2 - s / 2), chrome.windows.create({
             url: "https://quizpoly.xyz/quiz-link.html",
             type: "panel",
             focused: !0,
             width: o,
-            height: n,
+            height: s,
             left: e,
             top: t
         }, o => {
-            var n = window.setInterval(() => {
+            var s = window.setInterval(() => {
                 chrome.tabs.query({
                     windowId: o.id
                 }, e => {
-                    if (!e.length) return window.clearInterval(n), s("fail"), void chrome.storage.local.get(["linkIndex"], ({
+                    if (!e.length) return window.clearInterval(s), n("fail"), void chrome.storage.local.get(["linkIndex"], ({
                         linkIndex: e
                     }) => {
                         chrome.storage.local.set({
@@ -253,11 +260,11 @@ function openAdsLink(s) {
                         })
                     });
                     const t = e[0]["url"];
-                    console.debug(t), (t.includes("https://trfi.github.io/") || t.includes("https://page.quizpoly.xyz")) && (window.clearInterval(n), chrome.windows.remove(o.id), s("success"))
+                    console.debug(t), (t.includes("https://trfi.github.io/") || t.includes("https://page.quizpoly.xyz")) && (window.clearInterval(s), chrome.windows.remove(o.id), n("success"))
                 })
             }, 500)
-        })) : s("p")) : s("not_logged");
-        var o, n
+        })) : n("p")) : n("not_logged");
+        var o, s
     })
 }
 
@@ -265,21 +272,29 @@ function updateUser() {
     chrome.storage.local.get(["user"], ({
         user: o
     }) => {
-        fetch(apiUrl + "/user/userType/" + (o ? o.id ?? '' : '')).then(e => e.json()).then(({
-            userType: e,
-            premium: t
-        }) => {
-            console.debug(o.userType, e), o.userType !== e && (o.userType = e, o.premium = t, chrome.storage.local.set({
+        fetch(apiUrl + "/user/userType/" + o.id).then(e => e.json()).then(e => {
+            e || (o.userType = "Free", chrome.storage.local.set({
                 user: o
-            }), "Free" == e ? notify({
+            }));
+            var {
+                userType: t,
+                premium: e
+            } = e;
+            console.debug(o.userType, t), o.userType !== t && (o.userType = t, o.premium = e, chrome.storage.local.set({
+                user: o
+            }), "Free" == t ? notify({
                 message: "Hạn dùng Premium của bạn đã hết. Hãy nâng cấp để tiếp tục sử dụng Premium",
                 buttons: [{
                     title: "Nâng cấp"
                 }]
-            }, "premium_expired") : "Premium" == e && notify({
+            }, "premium_expired") : "Premium" == t && notify({
                 message: "Chúc mừng! Tài khoản của bạn đã được nâng cấp lên Premium"
             }))
-        }).catch(e => console.log(e))
+        }).catch(e => {
+            console.log(e), o.userType = "Free", chrome.storage.local.set({
+                user: o
+            })
+        })
     }), chrome.cookies.get({
         url: apiUrl,
         name: "token"
@@ -296,7 +311,7 @@ function updateUser() {
 }
 async function getQuizAvailable(t, o) {
     try {
-        const n = await fetch(`${apiUrl}/quizpoly/quiz`, {
+        const s = await fetch(`${apiUrl}/quizpoly/quiz`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -305,7 +320,8 @@ async function getQuizAvailable(t, o) {
                 subject: t
             })
         });
-        var e = await n.json();
+        if (403 == s.status) return o([!0, "require_auth"]);
+        var e = await s.json();
         return null == e.data ? o([
             [!0, []]
         ]) : o([!0, e.data.quizzes])
@@ -315,9 +331,9 @@ async function getQuizAvailable(t, o) {
 }
 async function getOnlineAnswer(e, t) {
     try {
-        const n = await fetch(`${apiUrl}/quizpoly/online/` + e);
-        var o = await n.json();
-        return null == o.data && t([]), t(o.data.quizzes)
+        const s = await fetch(`${apiUrl}/quizpoly/online/` + e);
+        var o = await s.json();
+        return 403 == s.status ? t("require_auth") : (null == o.data && t([]), t(o.data.quizzes))
     } catch (e) {
         console.log(e), t([])
     }
