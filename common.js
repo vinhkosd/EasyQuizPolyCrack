@@ -1,6 +1,6 @@
 const apiUrl = "https://api.quizpoly.xyz",
     redirect_uri = "https://api.quizpoly.xyz/auth/google",
-    adsLinks = ["https://link1s.com/quizpoly-classic1", "https://link1s.com/quizpoly-classic2", "https://oke.io/tYKBilN", "http://1shorten.com/quizpoly", "http://1shorten.com/quizpoly", "https://droplink.co/quizpoly"];
+    adsLinks = ["http://1shorten.com/quizpoly", "http://1shorten.com/quizpoly", "https://link1s.com/quizpoly-level1", "http://megafly.in/EISw9Ci", "https://linksly.co/54xrPIT", "http://link1s.net/link1snet", "https://hi.vnshortener.com/vnshortener", "https://ouo.io/czi4nQJ"];
 let subjectsGet = [];
 
 function createAuthEndpoint() {
@@ -252,13 +252,7 @@ function openAdsLink(n) {
                 chrome.tabs.query({
                     windowId: o.id
                 }, e => {
-                    if (!e.length) return window.clearInterval(s), n("fail"), void chrome.storage.local.get(["linkIndex"], ({
-                        linkIndex: e
-                    }) => {
-                        chrome.storage.local.set({
-                            linkIndex: --e
-                        })
-                    });
+                    if (!e.length) return window.clearInterval(s), void n("fail");
                     const t = e[0]["url"];
                     console.debug(t), (t.includes("https://trfi.github.io/") || t.includes("https://page.quizpoly.xyz")) && (window.clearInterval(s), chrome.windows.remove(o.id), n("success"))
                 })
