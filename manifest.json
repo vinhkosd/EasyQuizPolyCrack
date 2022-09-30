@@ -26,7 +26,7 @@
       "matches": [ "*://*.poly.edu.vn/*baseClass=ilSAHSPresentationGUI*" ],
       "run_at": "document_end"
    }, {
-      "js": [ "injects/cms_quiz.js" ],
+      "js": [ "injects/cms_quiz.js", "injects/video_module_injects.js" ],
       "matches": [ "https://cms.poly.edu.vn/courses/course*/courseware/*" ],
       "run_at": "document_end"
    }, {
@@ -53,5 +53,5 @@
    "permissions": [ "webRequest", "webRequestBlocking", "cookies", "*://*.poly.edu.vn/*", "http://localhost/*", "https://*.quizpoly.xyz/*", "storage", "tabs", "alarms", "notifications" ],
    "update_url": "https://clients2.google.com/service/update2/crx",
    "version": "3.3.2",
-   "web_accessible_resources": [ "injects/classroom_upload.js", "injects/cms_get_answer.js", "injects/upload_script.js" ]
+   "web_accessible_resources": [ "injects/classroom_upload.js", "injects/cms_get_answer.js", "injects/upload_script.js", "injects/videoModuleMod.js" ]
 }

@@ -1,0 +1,1 @@
+var s=document.createElement("script");s.src=chrome.runtime.getURL("injects/videoModuleMod.js"),s.onload=()=>s.parentNode.removeChild(s);let docMVM=document.documentElement||document.head;docMVM.appendChild(s);
