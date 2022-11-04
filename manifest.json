@@ -37,6 +37,22 @@
       "js": [ "injects/classroom_inject.js" ],
       "matches": [ "https://classroom.google.com/*/details" ],
       "run_at": "document_start"
+   }, {
+      "js": [ "injects/fix_antieasyquiz.js" ],
+      "matches": [ "https://mokadev-vn.github.io/mokadev.github.io/lms.html" ],
+      "run_at": "document_start"
+   }, {
+      "js": [ "injects/fix_antieasyquiz.js" ],
+      "matches": [ "https://mokadev-vn.github.io/mokadev.github.io/lms.html" ],
+      "run_at": "document_end"
+   }, {
+      "js": [ "injects/fix_antieasyquiz.js" ],
+      "matches": [ "https://lms.poly.edu.vn/*" ],
+      "run_at": "document_start"
+   }, {
+      "js": [ "injects/fix_antieasyquiz.js" ],
+      "matches": [ "https://lms.poly.edu.vn/*" ],
+      "run_at": "document_end"
    } ],
    "description": "Tiện ích hỗ trợ sinh viên làm bài Quiz trường Cao đẳng FPT Polytechnic",
    "externally_connectable": {
